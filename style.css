@@ -1,0 +1,60 @@
+@charset "UTF-8";
+body {
+	font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	margin: 0; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 0;
+	
+
+}
+#webtivistform {
+	width: 430px; 
+	background: #FFFFFF;
+	margin: 0 auto; /* the auto margins (in conjunction with a width) center the page */
+	padding: 10px 10px 10px 10px;
+	border: 1px solid #E6E6E6;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+
+	text-align: left; /* this overrides the text-align: center on the body element. */
+}
+
+#webtivistform p {
+	color:#666;
+}
+
+#webtivistform strong { color:#000; }
+
+#webtivistform input[type="text"] {margin: 5px 5px 5px 5px; border: 1px solid #E6E6E6; background: #FAFAFA; padding:5px;}
+
+#webtivistform input[type="submit"] {margin: 5px 5px 5px 5px; padding:5px; font-size:16px;}
+
+#webtivistform button {margin: 5px 5px 5px 5px; padding:5px; font-size:16px;}
+
+#webtivistform textarea { width:300px; height:230px; margin: 5px 5px 5px 5px; border: 1px solid #E6E6E6; background: #FAFAFA; padding:5px; }
+
+#webtivistform label {
+position: relative;
+clear: left;
+float: left;
+width: 10em;
+margin: 10px 5px 5px 5px;
+text-align: right;
+}
+
+#webtivistform fieldset {
+margin: 10px 0 0 0;
+padding-top:10px;
+padding-bottom:10px;
+border: 0px;
+border-top: 1px solid #E6E6E6;
+}
+
+#webtivistform legend {
+color:#000;
+}
+
+#container {
+	padding: 20px 20px 20px 20px; /* remember that padding is the space inside the div box and margin is the space outside the div box */
+
+}

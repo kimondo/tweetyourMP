@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Find your MP</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+
+<!-- originally I included an alternative letter function --->
+
+<SCRIPT>
+function submitFunction(i) {
+   if (i==1) document.webtivist.action=
+      "mplookup_twitter.php"; 
+	if (i==1) 		document.webtivist.action_name.value= 'mp_email';
+
+	  
+   if (i==2) document.webtivist.action=
+      "mplookup_letter.php";
+	if (i==2)   document.webtivist.action_name.value= 'mp_letter';
+   document.webtivist.submit()
+   }
+</SCRIPT>
+
+
+
+
+
+
+<body>
+
+<div id="container">
+  <div id="webtivistform">
+    <h1>Tweet your MP</h1>
+   <p>Just a little widget to look up some details about your MP.</p>
+     <form action="" method="post" name="webtivist" id="webtivist">
+     <fieldset><legend>Find your MP</legend>		
+<label>Postcode:</label>
+
+<input type="text" name="postcode" value="">
+</fieldset>
+  <input type="hidden" name="action_settings" value="" />
+   <input type="hidden" name="action_name" value="" />
+  <button type="submit" onClick="submitFunction(1)">Find your MP</button>
+   <!-- <button type="submit" onClick="submitFunction(2)">Write a letter to your MP</button> -->
+    </form>
+    <p>Constituency lookup by <a href="http://theyworkforyou.com" target="_blank">TheyWorkforYou.com</a> script by <a href="http://kimondo.co.uk" target="_blank">Pete</a></p>
+    
+
+	<!-- end #webtivistform --></div>
+<!-- end #container --></div>
+</body>
+</html>
