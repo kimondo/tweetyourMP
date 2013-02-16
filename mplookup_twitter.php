@@ -17,7 +17,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 
 // if you would like to help fund development of this script please visit
-// www.kimondo.co.uk
+// www.kimondo.co.uk/webtivist
 
 // this script requries php 5 for the validation code to work
 
@@ -71,6 +71,7 @@ $twfyapi = new TWFYAPI($twfykey);
  $senderpostcode = $_POST['postcode'];
  $senderpostcode = filter_var($senderpostcode, FILTER_SANITIZE_STRING);
 
+// $senderpostcode = 'sw2 2ax'; //for testing use form in final version
 
 // remove spaces from the sting 
 
@@ -133,28 +134,14 @@ echo "<p>$mpfirstname $mpsecondname</p>";
 if(empty($mptwitter)){
 
 	echo "<h2>Send your MP a tweet</h2>
-	<p>Your MP doesn't have a twitter account listed.</p>"; }
+	<p>Your MP doesn't have a twitter account listed :(.</p>"; }
 	
 else {
 
 
 echo "<h2>Send your MP a tweet</h2>";
-echo "<script src='http://platform.twitter.com/anywhere.js?id=$twitterkey=1' type='text/javascript'></script>
-<div id='tbox'></div>
-<script type=\"text/javascript\">
-
-  twttr.anywhere(function (T) {
-
-    T(\"#tbox\").tweetBox({
-      height: 100,
-      width: 400,
-	  label: '$sendersubject',
-      defaultContent: \"$mptwitter #tweetyourMP \"
-    });
-
-  });
-
-</script>";
+echo "<a href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter\" class=\"twitter-mention-button\" data-lang=\"en\" data-size=\"large\">Tweet your MP</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=\"https://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>";
 	}
 
 // leave a comment on your MP's website
@@ -162,7 +149,7 @@ echo "<script src='http://platform.twitter.com/anywhere.js?id=$twitterkey=1' typ
 if(empty($mphomepage)){
 
 	echo "<h2>Leave a comment on your MP's website</h2>
-	<p>Your MP doesn't have a website listed.</p>"; }
+	<p>Your MP doesn't have a website listed :(.</p>"; }
 	
 else {
 
