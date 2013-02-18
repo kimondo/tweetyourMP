@@ -150,13 +150,15 @@ echo "<a href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter\" class=
 if(empty($mphomepage)){
 
 	echo "<h2>Leave a comment on your MP's website</h2>
-	<p>Your MP doesn't have a website listed :(.</p>"; }
+	<p>Your MP doesn't have a website listed :(.</p>
+	<p>You could try sending them a message through <A href=\"$twfypage\" target=\"_blank\">TheyWorkForYou.com</a>"; }
 	
 else {
 
 	echo "<h2>Leave a comment on your MP's website</h2>
-	<p>Your MP has a site listed at <a href='$mphomepage' target='_blank'>$mphomepage</a></p>";
-	
+	<p>Your MP has a site listed at <a href='$mphomepage' target='_blank'>$mphomepage</a></p>
+	<p>You can also send them a message through <A href=\"$twfypage\" target='_blank'>TheyWorkForYou.com</a>";
+		
 	}
 	
 // add other contact options here - phone as an example, could add email or post here.
