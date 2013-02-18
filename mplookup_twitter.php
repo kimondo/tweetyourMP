@@ -46,17 +46,10 @@
 
 include 'settings.php';
 
-$actionname = $_POST['action_name'];
-$actionname = filter_var($actionname, FILTER_SANITIZE_STRING);
 
 // Live action code follows ************************************************************************************************
 
 $mpdata = "mpdata";
-
-// get the current time
-
-$time = date("m/d/y : H:i:s",time());
-
 
 // Include the API binding
 
@@ -68,12 +61,10 @@ $twfyapi = new TWFYAPI($twfykey);
 
 // get the postcode from the form
 
- $senderpostcode = $_POST['postcode'];
- $senderpostcode = filter_var($senderpostcode, FILTER_SANITIZE_STRING);
+$senderpostcode = $_POST['postcode'];
+$senderpostcode = filter_var($senderpostcode, FILTER_SANITIZE_STRING);
 
-// $senderpostcode = 'sw2 2ax'; //for testing use form in final version
-
-// remove spaces from the sting 
+// remove spaces from the string 
 
 $sPattern = '/\s*/m';
 $sReplace = '';
@@ -81,6 +72,7 @@ $sReplace = '';
 $senderpostcode2 = preg_replace( $sPattern, $sReplace, $senderpostcode );
 
 // send the query to theyworkforyou.com (twfy)
+
  
 $mps = $twfyapi->query('getConstituency', array('output' => 'php', 'postcode' => $senderpostcode2));
 
@@ -88,7 +80,8 @@ $mps = $twfyapi->query('getConstituency', array('output' => 'php', 'postcode' =>
 // by sorting out the array - but it works. Will try and make it better later.
 
 $pieces = explode(";", $mps);
-$constituency_data=$pieces[11]; // get the constituency name from the list of other stuff provided
+//$constituency_data=$pieces[11]; // get the constituency name from the list of other stuff provided
+$constituency_data=$pieces[7]; // get the constituency name from the list of other stuff provided
 preg_match('/"([^"]+)"/', $constituency_data, $constituency_name); // get rid of the other bits
 $constituency_name=$constituency_name[1]; // turn it into a simple string
 
@@ -99,6 +92,10 @@ echo $header_template;
 // if TWFY is not returning a valid constituency
 
 if (empty($constituency_name)) {
+
+// for debugging the TWFY output
+// echo $mps;
+
 echo '<script language="javascript" type="text/javascript">alert("Sorry we can\'t find a constituency for that postcode - please try again"); history.back();</script>';
 exit(); //and stop running the script
 }
