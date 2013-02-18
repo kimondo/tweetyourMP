@@ -121,15 +121,19 @@ $result = mysql_query("SELECT * FROM $mpdata WHERE constituency='$constituency_n
 
 $row = mysql_fetch_assoc($result);
 
+$mptitle = $row['title'];
 $mpfirstname = $row['firstname'];
 $mpsecondname = $row['secondname'];
-$mpemail = $row['email'];
+$mpemail = $row['email (parliament)'];
+$mpemail2 = $row['alt email'];
 $mptwitter = $row['twitter'];	
 $mpphone = $row['phone'];	
+$mpparty = $row['party'];
+$twfypage = $row['twfypage'];
 $mphomepage = $row['homepage'];	
 
 echo "<fieldset><legend>Your MP info</legend>";
-echo "<p>$mpfirstname $mpsecondname</p>";
+echo "<p>$mptitle $mpfirstname $mpsecondname $mpparty</p>";
 
 if(empty($mptwitter)){
 
@@ -140,7 +144,7 @@ else {
 
 
 echo "<h2>Send your MP a tweet</h2>";
-echo "<a href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter\" class=\"twitter-mention-button\" data-lang=\"en\" data-size=\"large\">Tweet your MP</a>
+echo "<a href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter\" class=\"twitter-mention-button\" data-hashtags=\"tweetyourMP\" data-lang=\"en\" data-size=\"large\">Tweet your MP</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=\"https://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>";
 	}
 
