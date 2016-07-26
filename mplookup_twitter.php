@@ -47,9 +47,16 @@
 include 'settings.php';
 
 
+
+
 // Live action code follows ************************************************************************************************
 
 $mpdata = "mpdata";
+
+// get the current time
+
+$time = date("m/d/y : H:i:s",time());
+
 
 // Include the API binding
 
@@ -61,10 +68,29 @@ $twfyapi = new TWFYAPI($twfykey);
 
 // get the postcode from the form
 
-$senderpostcode = $_POST['postcode'];
-$senderpostcode = filter_var($senderpostcode, FILTER_SANITIZE_STRING);
+ $senderpostcode = $_POST['postcode'];
+ $senderpostcode = filter_var($senderpostcode, FILTER_SANITIZE_STRING);
+ 
+// get the twitter message from the form (if defined) 
+ 
+ $tweetmsg = $_POST['tweetmsg'];
+ $tweetmsg = filter_var($tweetmsg, FILTER_SANITIZE_STRING);
 
-// remove spaces from the string 
+
+ 
+ // define sent via (if empty) or get from the form
+
+  $sentvia = $_POST['sentvia'];
+ $sentvia = filter_var($sentvia, FILTER_SANITIZE_STRING);
+ 
+ if (empty($sentvia)) { $sentvia="@tweet_your_mp";}
+ else {};
+ 
+ 
+ 
+// $senderpostcode = 'sw2 2ax'; //for testing use form in final version
+
+// remove spaces from the sting 
 
 $sPattern = '/\s*/m';
 $sReplace = '';
@@ -72,16 +98,18 @@ $sReplace = '';
 $senderpostcode2 = preg_replace( $sPattern, $sReplace, $senderpostcode );
 
 // send the query to theyworkforyou.com (twfy)
-
  
 $mps = $twfyapi->query('getConstituency', array('output' => 'php', 'postcode' => $senderpostcode2));
+
 
 // the next bit sorts the data you get back from twfy. It's not very elegant and could probably be done
 // by sorting out the array - but it works. Will try and make it better later.
 
-$pieces = explode(";", $mps);
-//$constituency_data=$pieces[11]; // get the constituency name from the list of other stuff provided
-$constituency_data=$pieces[7]; // get the constituency name from the list of other stuff provided
+$pieces = explode(":", $mps);
+// get the constituency name from the list of other stuff provided - the string returned from TWFY is a differing length 
+// but the last value is always the TWFY constituency name
+$constituency_data = end(explode(":", $mps));
+
 preg_match('/"([^"]+)"/', $constituency_data, $constituency_name); // get rid of the other bits
 $constituency_name=$constituency_name[1]; // turn it into a simple string
 
@@ -92,10 +120,6 @@ echo $header_template;
 // if TWFY is not returning a valid constituency
 
 if (empty($constituency_name)) {
-
-// for debugging the TWFY output
-// echo $mps;
-
 echo '<script language="javascript" type="text/javascript">alert("Sorry we can\'t find a constituency for that postcode - please try again"); history.back();</script>';
 exit(); //and stop running the script
 }
@@ -104,7 +128,12 @@ else {
 // just carry on 
 }		
 
-echo "<h2>Your constituency is $constituency_name </h2>";
+
+
+
+echo "<h1>Tweet your MP</h1>";
+
+echo "<h2>Your constituency is:<br/> $constituency_name </h2>";
 
 // now to lookup the MP's details from the database
 
@@ -112,75 +141,128 @@ $link_id = mysql_connect($dbhost, $dbuser, $dbpass);
 mysql_select_db($dbname, $link_id) or die(mysql_error());
 
 
+//$con=mysqli_connect($dbhost, $dbuser, $dbpass,$dbname);
+
 $result = mysql_query("SELECT * FROM $mpdata WHERE constituency='$constituency_name' ");
 
 // and to turn those results into lovely strings
 
 $row = mysql_fetch_assoc($result);
 
-$mptitle = $row['title'];
 $mpfirstname = $row['firstname'];
 $mpsecondname = $row['secondname'];
-$mpemail = $row['email (parliament)'];
-$mpemail2 = $row['alt email'];
-$mptwitter = $row['twitter'];	
-$mpphone = $row['phone'];	
 $mpparty = $row['party'];
-$twfypage = $row['twfypage'];
+$mpemail = $row['email (parliament)'];
+$mptwitter = $row['twitter'];	
+$mpfacebook= $row['facebook'];	
 $mphomepage = $row['homepage'];	
+$mpnotes = $row['notes'];
 
-echo "<fieldset><legend>Your MP info</legend>";
-echo "<p>$mptitle $mpfirstname $mpsecondname $mpparty</p>";
+// record the lookup (optional)
+
+//$mpcounter = $row['Count'];
+
+//$addcounter=$mpcounter+1;
+
+
+//$update = mysql_query("UPDATE $mpdata SET Count = '$addcounter' WHERE constituency='$constituency_name' ");
+//mysql_query($sql);
+
+// close the database
+
+mysql_close($link_id);
+
+// catch errors (e.g. invalid postcode)
+
+if (empty($mpfirstname)) {
+echo '<script language="javascript" type="text/javascript">alert("Sorry we can\'t find a constituency for that postcode - please try again"); history.back();</script>';
+exit(); //and stop running the script
+}
+
+else {
+// just carry on 
+}		
+
+
+
+echo "<h2>Your MP is:<br/> $mpfirstname $mpsecondname ($mpparty)</h2>";
+
+if(empty($mpnotes)){
+	// do nothing 
+}
+
+else {
+
+echo "<p>$mpnotes</p>";
+
+}  
 
 if(empty($mptwitter)){
 
-	echo "<h2>Send your MP a tweet</h2>
-	<p>Your MP doesn't have a twitter account listed :(.</p>"; }
+	echo "<p><span class=\"glyphicon glyphicon-alert\" aria-hidden=\"true\"></span> Your MP doesn't have a twitter account listed</p>"; }
 	
 else {
 
+// twitter button style - am using the responsive button style below
+//<a href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter&text=sent%20via%20tweetyourmp.com\" class=\"twitter-mention-button\" data-size=\"large\" data-related=\"kimondo\">Tweet to $mptwitter</a>
+//<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-echo "<h2>Send your MP a tweet</h2>";
-echo "<a href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter\" class=\"twitter-mention-button\" data-hashtags=\"tweetyourMP\" data-lang=\"en\" data-size=\"large\">Tweet your MP</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=\"https://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>";
+
+echo "<p>Send your MP a tweet:</p>
+<p><a class=\"btn btn-primary btn-lg\" role=\"button\" href=\"https://twitter.com/intent/tweet?screen_name=$mptwitter&text=hello%20$mptwitter%20$tweetmsg%20%0A%20via%20$sentvia\" target=\"_blank\">Tweet $mptwitter</a>
+</p>";
 	}
+
+// email your mp
+
+if(empty($mpemail)){
+
+	echo "<p><span class=\"glyphicon glyphicon-alert\" aria-hidden=\"true\"></span> Your MP doesn't have an email address listed</p>"; }
+	
+else {
+
+	echo "<p><span class=\"glyphicon glyphicon-envelope\" aria-hidden=\"true\"></span> <a href='mailto:$mpemail' target='_blank'>$mpemail</a></p>";
+	
+	}
+
 
 // leave a comment on your MP's website
 
 if(empty($mphomepage)){
 
-	echo "<h2>Leave a comment on your MP's website</h2>
-	<p>Your MP doesn't have a website listed :(.</p>
-	<p>You could try sending them a message through <A href=\"$twfypage\" target=\"_blank\">TheyWorkForYou.com</a>"; }
+	echo "<p><span class=\"glyphicon glyphicon-alert\" aria-hidden=\"true\"></span> Your MP doesn't have a website listed</p>"; }
 	
 else {
 
-	echo "<h2>Leave a comment on your MP's website</h2>
-	<p>Your MP has a site listed at <a href='$mphomepage' target='_blank'>$mphomepage</a></p>
-	<p>You can also send them a message through <A href=\"$twfypage\" target='_blank'>TheyWorkForYou.com</a>";
-		
+	echo "<p><span class=\"glyphicon glyphicon-comment\" aria-hidden=\"true\"></span> <strong><a href='$mphomepage' target='_blank'>$mphomepage</a></p></strong>";
+	
 	}
 	
-// add other contact options here - phone as an example, could add email or post here.
+// add other contact options here - phone as an example, could add post address or constituency meeting here
 	
-//if(empty($mpphone)){
-//	echo "<H2>Phone your MP</h2>
-//	<p>We don't have a phone number listed for your MP</p>"; }
+if(empty($mpfacebook)){
+echo "<p><span class=\"glyphicon glyphicon-alert\" aria-hidden=\"true\"></span> Your MP doesn't have a facebook page listed</p>"; }
 	
-//else {
+else {
 	
-// phone your MP
+// facebook
 
-//echo "<h2>Phone your MP</h2>
-//	<p>You can also call your MP at $mpphone</p>";
+echo "<p><span class=\"glyphicon glyphicon-comment\" aria-hidden=\"true\"></span> <strong><a href='$mpfacebook' target='_blank'>Comment on your MP's facebook page</a></p></strong>";
 	
-//	}
+	}
 	
 // end of MP details
 	
-echo '</fieldset><p><a href="index.html">Start again</a>';
+echo '</fieldset>
+<p><a class="btn btn-primary btn-lg" role="button" href="index.html"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> Start again</a>';
 
+// feedback
 
+echo '<p><small><a href="http://kimondo.co.uk/contact-me/">Feedback?</a></p></small>';
+
+// number of times MP has been tweeted commented out for now...
+
+//echo "<!-- <p><small>$mpfirstname $mpsecondname has been tweeted approximately $mpcounter time(s) using this tool.</small></p> -->";
 // footer as defined in actionsettings.php
 
 echo $footer_template;

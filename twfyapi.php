@@ -115,7 +115,7 @@ class TWFYAPI_Request
 {
 
     // API URL
-    private $URL = 'http://www.theyworkforyou.com/api/';
+    private $URL = 'https://www.theyworkforyou.com/api/';
 
     // Chosen function, arguments and API key
     private $func;
