@@ -14,6 +14,7 @@ This makes use of the very useful TheyWorkForYou.com postcode to constituency lo
 
 Note that this code contains a few legacy bits and pieces left over from when it was called Webtivist.
 
+To install download these files and create a database on your website to store the MP data. Edit the settings.php file with the theyworkforyou.com API key and database login details.
 
 Feedback, comments, complaints, support at http://kimondo.co.uk/tweet-your-mp/ 
 
