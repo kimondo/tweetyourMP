@@ -14,7 +14,7 @@ This makes use of the very useful TheyWorkForYou.com postcode to constituency lo
 
 Note that this code contains a few legacy bits and pieces left over from when it was called Webtivist.
 
-To install download these files and create a database on your website to store the MP data. Edit the settings.php file with the theyworkforyou.com API key and database login details.
+To install download these files and create a database on your website to store the MP data. Edit the settings.php file with the theyworkforyou.com API key and database login details. Note that you will need to apply for a API key from theyworkforyou.com/api - these are free for charitible use of 50,000 lookups per year.
 
 Feedback, comments, complaints, support at http://kimondo.co.uk/tweet-your-mp/ 
 
@@ -39,14 +39,9 @@ Feedback, comments, complaints, support at http://kimondo.co.uk/tweet-your-mp/
 // If not, see <http://www.gnu.org/licenses/>.
 
 // if you would like to help fund development of this script please visit
-// www.kimondo.co.uk/webtivist
+// www.kimondo.co.uk/
 
 // this script requries php 5 for the validation code to work
-
-// ==========================================================================
-// | Edit the settings in actionsettings.php. I've annotated this script so |
-// | you know what's going on and can make adjustments if you want to       |
-// ==========================================================================
 
 // **********************************************************************
 // TWFY::API PHP API interface for TheyWorkForYou.com
@@ -64,4 +59,3 @@ Feedback, comments, complaints, support at http://kimondo.co.uk/tweet-your-mp/
 // Available at: http://search.cpan.org/~sden/WebService-TWFY-API-0.01/
 // **********************************************************************
 // 
-// I've included a stylesheet to make the MP action look a bit neater
